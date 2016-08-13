@@ -36,7 +36,7 @@ public class ItemModel {
 			PreparedStatement stmt;
 			stmt = conn.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
-			if (rs.next()) {
+			while (rs.next()) {
 				ItemModel item = new ItemModel();
 				item.itemID = rs.getInt("itemID");
 				item.itemEvoCode = rs.getString("itemEvoCode");

@@ -18,7 +18,7 @@ public class DBConnection {
 					.getConnection("jdbc:mysql://127.13.62.130:3306/mpapp?"
 							+ "user=adminwqb4Kmc&password=gGniRgEyUmFE&characterEncoding=utf8");
 		//	 connection = DriverManager
-		//	 .getConnection("jdbc:mysql://localhost:3306/MPApp","root","phpMyAdmin_MySQL");
+			// .getConnection("jdbc:mysql://localhost:3306/MPApp","root","phpMyAdmin_MySQL");
 			return connection;
 		} catch (SQLException e) {
 			e.printStackTrace();
