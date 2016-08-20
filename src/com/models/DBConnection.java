@@ -16,14 +16,13 @@ public class DBConnection {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager
 					.getConnection("jdbc:mysql://127.13.62.130:3306/mpapp?"
-							+ "user=adminwqb4Kmc&password=gGniRgEyUmFE&characterEncoding=utf8");
-		//	 connection = DriverManager
-			// .getConnection("jdbc:mysql://localhost:3306/MPApp","root","phpMyAdmin_MySQL");
+							+ "user=adminwqb4Kmc&password=mpautomation&characterEncoding=utf8");
+		//	connection = DriverManager
+		//	 .getConnection("jdbc:mysql://localhost:3306/MPApp","root","phpMyAdmin_MySQL");
 			return connection;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
