@@ -47,23 +47,6 @@ public class ItemServices {
 	}
 	
 	@POST
-	@Path("/getItemsInScenario")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String getItemsInScenario(@FormParam("scenarioID") int scenarioID) {
-		ArrayList<ItemModel> items = ItemModel.getItemsInScenario(scenarioID);
-		JSONArray json = new JSONArray();
-		for (int i = 0; i < items.size(); ++i) {
-			JSONObject jsonObj = new JSONObject();
-			jsonObj.put("itemID", items.get(i).getItemID());
-			jsonObj.put("itemEvoCode", items.get(i).getItemEvoCode());
-			jsonObj.put("itemShortDescription", items.get(i).getItemShortDecription());
-			jsonObj.put("itemQuantity", items.get(i).getItemQuantity());
-			json.add(jsonObj);
-		}
-		return json.toJSONString();
-	}
-	
-	@POST
 	@Path("/editItem")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String editItem(@FormParam("itemID") int itemID, @FormParam("itemEvoCode") String itemEvoCode, @FormParam("itemShortDescription") String itemShortDescription, @FormParam("itemQuantity") int itemQuantity){
@@ -83,5 +66,20 @@ public class ItemServices {
 		JSONObject json = new JSONObject();
 		json.put("added", added);
 		return json.toJSONString();
+	}
+	
+	@POST
+	@Path("/getItem")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getItem(@FormParam("itemID") int itemID) {
+		ItemModel item = ItemModel.getItem(itemID);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("itemID", item.getItemID());
+		jsonObj.put("itemEvoCode", item.getItemEvoCode());
+		jsonObj.put("itemShortDescription", item.getItemShortDecription());
+		jsonObj.put("itemQuantity", item.getItemQuantity());
+		
+		return jsonObj.toJSONString();
 	}
 }

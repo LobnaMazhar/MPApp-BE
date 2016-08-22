@@ -34,7 +34,7 @@ public class ItemModel {
     	ArrayList<ItemModel> items = new ArrayList<ItemModel>();
     	try {
     		Connection conn = DBConnection.getActiveConnection();
-        	String sql = "SELECT * FROM `items`";
+        	String sql = "SELECT * FROM `items` ORDER BY `itemShortDescription`";
 			PreparedStatement stmt;
 			stmt = conn.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
@@ -107,30 +107,6 @@ public class ItemModel {
     	return false;
     }
 
-    public static ArrayList<ItemModel> getItemsInScenario(int scenarioID){
-    	ArrayList<ItemModel> itemsInScenario = new ArrayList<ItemModel>();
-    	try {
-    		Connection conn = DBConnection.getActiveConnection();
-        	String sql = "SELECT * from items join items_scenarios on items.itemID = items_scenarios.items_scenariosItemID and items_scenarios.items_scenariosScenarioID = ?";
-			PreparedStatement stmt;
-			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, scenarioID);
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				ItemModel item = new ItemModel();
-				item.itemID = rs.getInt("itemID");
-				item.itemEvoCode = rs.getString("itemEvoCode");
-				item.itemShortDescription = rs.getString("itemShortDescription");
-				item.itemQuantity = rs.getInt("itemQuantity");
-				itemsInScenario.add(item);
-			}
-			return itemsInScenario;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-    	return itemsInScenario;
-    }
-
     public static boolean addItemsToScenario(int scenarioNumber, ArrayList<Integer> selectedItemsIDsList){
     	//get scenarioNumber
     	//loop 3la l AL
@@ -150,5 +126,28 @@ public class ItemModel {
 			e.printStackTrace();
 		}
 		return false;
+    }
+
+    public static ItemModel getItem(int itemID){
+    	ItemModel item = new ItemModel();
+    	try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "SELECT * FROM `items` WHERE itemID = ?";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, itemID);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				item.itemID = rs.getInt("itemID");
+				item.itemEvoCode = rs.getString("itemEvoCode");
+				item.itemShortDescription = rs.getString("itemShortDescription");
+				item.itemQuantity = rs.getInt("itemQuantity");
+			}
+			return item;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return item;
+    
     }
 }
