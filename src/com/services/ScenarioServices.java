@@ -45,8 +45,8 @@ public class ScenarioServices {
 	@POST
 	@Path("/addScenario")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String addScenario(@FormParam("scenarioNumber") int scenarioNumber, @FormParam("projectID") int projectID) {
-		boolean added = ScenarioModel.addScenario(scenarioNumber, projectID);
+	public String addScenario(@FormParam("scenarioNumber") int scenarioNumber) {
+		boolean added = ScenarioModel.addScenario(scenarioNumber);
 		JSONObject json = new JSONObject();
 		json.put("added", added);
 		return json.toJSONString();
@@ -65,8 +65,8 @@ public class ScenarioServices {
 	@POST
 	@Path("/editScenario")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String editScenario(@FormParam("scenarioID") int scenarioID, @FormParam("scenarioNumber") int scenarioNumber, @FormParam("projectName") String projectName){
-		boolean edited = ScenarioModel.editScenario(scenarioID, scenarioNumber, projectName);
+	public String editScenario(@FormParam("scenarioID") int scenarioID, @FormParam("scenarioNumber") int scenarioNumber){
+		boolean edited = ScenarioModel.editScenario(scenarioID, scenarioNumber);
 		JSONObject json = new JSONObject();
 		json.put("edited", edited);
 		return json.toJSONString();
@@ -90,6 +90,26 @@ public class ScenarioServices {
 		int scenarioID = ScenarioModel.getScenarioID(scenarioNumber);
 		JSONObject json = new JSONObject();
 		json.put("scenarioID", scenarioID);
+		return json.toJSONString();
+	}
+	
+	@POST
+	@Path("/addScenarioToProject")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String addScenarioToProject(@FormParam("projectID") int projectID, @FormParam("scenarioID") int scenarioID) {
+		boolean added = ScenarioModel.addScenarioToProject(projectID, scenarioID);
+		JSONObject json = new JSONObject();
+		json.put("added", added);
+		return json.toJSONString();
+	}
+	
+	@POST
+	@Path("/deleteScenarioFromProject")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String deleteScenarioFromProject(@FormParam("scenarioID") int scenarioID) {
+		boolean deleted = ScenarioModel.deleteScenarioFromProject(scenarioID);
+		JSONObject json = new JSONObject();
+		json.put("deleted", deleted);
 		return json.toJSONString();
 	}
 }

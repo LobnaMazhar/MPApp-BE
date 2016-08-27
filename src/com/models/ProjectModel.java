@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.mysql.jdbc.Statement;
+
 public class ProjectModel {
 	int projectID;
 	String projectName;
@@ -76,5 +78,55 @@ public class ProjectModel {
 			e.printStackTrace();
 		}
 		return projectID;
+	}
+	
+	public static boolean addProject(String projectName){
+    	try {
+			Connection conn = DBConnection.getActiveConnection();
+			String sql = "INSERT INTO `projects`(`projectName`) VALUES (?)";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			stmt.setString(1, projectName);
+			stmt.executeUpdate();
+			ResultSet rs = stmt.getGeneratedKeys();
+			if (rs.next()) {
+				return true;
+			}
+			return false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+    }
+	
+	public static boolean deleteProject(int projectID){
+		try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "DELETE FROM `projects` WHERE `projectID` = ?";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, projectID);
+			stmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	return false;
+	}
+	
+	public static boolean editProject(int projectID, String projectName){
+		try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "UPDATE `projects` SET `projectName` = ?  WHERE `projectID` = ?";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, projectName);
+			stmt.setInt(2, projectID);
+			stmt.executeUpdate();			
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	return false;
 	}
 }

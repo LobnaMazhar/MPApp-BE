@@ -74,4 +74,36 @@ public class ItemsInScenariosModel {
 		}
 			return false;
 	}
+	
+	public static boolean editItemQuantityInScenario(int itemQuantity, int itemID){
+		try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "UPDATE `items_scenarios` SET `items_scenariosItemQuantity`= ? WHERE `items_scenariosID`= ?";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, itemQuantity);
+			stmt.setInt(2, itemID);
+			stmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	return false;
+	}
+	
+	public static boolean deleteItemFromScenario(int itemID, int scenarioID){
+		try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "DELETE FROM `items_scenarios` WHERE `items_scenariosItemID` = ? AND `items_scenariosScenarioID` = ?";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, itemID);
+			stmt.setInt(2, scenarioID);
+			stmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	return false;
+	}
 }

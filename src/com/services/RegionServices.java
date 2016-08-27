@@ -10,21 +10,21 @@ import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.models.VendorModel;
+import com.models.RegionModel;
 
 @Path("/")
-public class VendorServices {
+public class RegionServices {
 	
 	@POST
-	@Path("/getVendors")
+	@Path("/getRegions")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getVendors() {
-		ArrayList<VendorModel> vendors = VendorModel.getVendors();
+	public String getRegions() {
+		ArrayList<RegionModel> regions = RegionModel.getRegions();
 		JSONArray json = new JSONArray();
-		for (int i = 0; i < vendors.size(); ++i) {
+		for (int i = 0; i < regions.size(); ++i) {
 			JSONObject jsonObj = new JSONObject();
-			jsonObj.put("vendorID", vendors.get(i).getVendorID());
-			jsonObj.put("vendorName", vendors.get(i).getVendorName());
+			jsonObj.put("regionID", regions.get(i).getRegionID());
+			jsonObj.put("regionName", regions.get(i).getRegionName());
 			json.add(jsonObj);
 		}
 		return json.toJSONString();

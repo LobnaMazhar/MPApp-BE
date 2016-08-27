@@ -58,14 +58,13 @@ public class ScenarioModel {
     	return false;
 	}
 	
-	public static boolean addScenario(int scenarioNumber, int projectID){
+	public static boolean addScenario(int scenarioNumber){
 		try {
 			Connection conn = DBConnection.getActiveConnection();
-			String sql = "INSERT INTO `scenarios`(`scenarioNumber`, `projectID`) VALUES (?, ?)";
+			String sql = "INSERT INTO `scenarios`(`scenarioNumber`) VALUES (?)";
 			PreparedStatement stmt;
 			stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, scenarioNumber);
-			stmt.setInt(2, projectID);
 			stmt.executeUpdate();
 			ResultSet rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
@@ -98,16 +97,14 @@ public class ScenarioModel {
 		return projectID;
 	}
 	
-	public static boolean editScenario(int scenarioID, int scenarioNumber, String projectName){
-		int projectID = ProjectModel.getProjectID(projectName);
+	public static boolean editScenario(int scenarioID, int scenarioNumber){
 		try {
     		Connection conn = DBConnection.getActiveConnection();
-        	String sql = "UPDATE `scenarios` SET `scenarioNumber` = ?, `projectID` = ?  WHERE `scenarioID` = ?";
+        	String sql = "UPDATE `scenarios` SET `scenarioNumber` = ?  WHERE `scenarioID` = ?";
 			PreparedStatement stmt;
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, scenarioNumber);
-			stmt.setInt(2, projectID);
-			stmt.setInt(3, scenarioID);
+			stmt.setInt(2, scenarioID);
 			stmt.executeUpdate();			
 			return true;
 		} catch (SQLException e) {
@@ -151,5 +148,36 @@ public class ScenarioModel {
 			e.printStackTrace();
 		}
 		return scenarioID;
+	}
+	
+	public static boolean addScenarioToProject(int projectID, int scenarioID){
+		try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "UPDATE `scenarios` SET `projectID` = ? WHERE `scenarioID` = ?";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, projectID);
+			stmt.setInt(2, scenarioID);
+			stmt.executeUpdate();			
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	return false;
+	}
+	
+	public static boolean deleteScenarioFromProject(int scenarioID){
+		try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "UPDATE `scenarios` SET `projectID` = NULL WHERE `scenarioID` = ?";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, scenarioID);
+			stmt.executeUpdate();			
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	return false;
 	}
 }

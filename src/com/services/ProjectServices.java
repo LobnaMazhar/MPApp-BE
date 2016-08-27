@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.models.ItemModel;
 import com.models.ProjectModel;
 
 @Path("/")
@@ -49,5 +50,36 @@ public class ProjectServices {
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("projectID", projectID);
 		return jsonObj.toJSONString();
+	}
+	
+	@POST
+	@Path("/addProject")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String addProject(@FormParam("projectName") String projectName) {
+		boolean added = ProjectModel.addProject(projectName);
+		JSONObject json = new JSONObject();
+		json.put("added", added);
+		return json.toJSONString();
+	}
+	
+	@POST
+	@Path("/deleteProject")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String deleteProject(@FormParam("projectID") int projectID){
+		boolean deleted = ProjectModel.deleteProject(projectID);
+		JSONObject json = new JSONObject();
+		json.put("deleted", deleted);
+		return json.toJSONString();
+	}
+	
+	@POST
+	@Path("/editProject")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String editProject(@FormParam("projectID") int projectID, @FormParam("projectName") String projectName){
+		boolean edited = ProjectModel.editProject(projectID, projectName);
+		JSONObject json = new JSONObject();
+		json.put("edited", edited);
+		return json.toJSONString();
+			
 	}
 }
