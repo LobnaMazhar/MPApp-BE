@@ -2,6 +2,7 @@ package com.services;
 
 import java.util.ArrayList;
 
+import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -10,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.models.RegionModel;
 import com.models.VendorModel;
 
 @Path("/")
@@ -28,5 +30,15 @@ public class VendorServices {
 			json.add(jsonObj);
 		}
 		return json.toJSONString();
+	}
+	
+	@POST
+	@Path("/getVendorNameByID")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getVendorName(@FormParam("vendorID") int vendorID) {
+		String vendorName = VendorModel.getVendorName(vendorID);
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("vendorName", vendorName);
+		return jsonObj.toJSONString();
 	}
 }

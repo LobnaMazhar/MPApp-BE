@@ -2,6 +2,7 @@ package com.services;
 
 import java.util.ArrayList;
 
+import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -28,5 +29,26 @@ public class RegionServices {
 			json.add(jsonObj);
 		}
 		return json.toJSONString();
+	}
+	
+	@POST
+	@Path("/getRegionByID")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getRegionByID(@FormParam("regionID") int regionID) {
+		RegionModel regionObject = RegionModel.getRegion(regionID);
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("regionID", regionObject.getRegionID());
+		jsonObj.put("regionName", regionObject.getRegionName());
+		return jsonObj.toJSONString();
+	}
+	
+	@POST
+	@Path("/getRegionNameByID")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getRegionName(@FormParam("regionID") int regionID) {
+		String regionName = RegionModel.getRegionName(regionID);
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("regionName", regionName);
+		return jsonObj.toJSONString();
 	}
 }

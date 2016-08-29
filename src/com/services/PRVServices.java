@@ -63,9 +63,6 @@ public class PRVServices {
 			jsonObj.put("prvRegionID", prvs.get(i).getPrvRegionID());
 			jsonObj.put("prvVendorID", prvs.get(i).getPrvVendorID());
 			jsonObj.put("prvYearTarget", prvs.get(i).getPrvYearTarget());
-			
-	//		String projectName = ProjectModel.getProjectName(prvs.get(i).getPrvProjectID());
-	//		jsonObj.put("projectName", projectName);	
 			json.add(jsonObj);	
 		}
 		return json.toJSONString();

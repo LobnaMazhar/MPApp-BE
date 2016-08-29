@@ -180,4 +180,26 @@ public class ScenarioModel {
 		}
     	return false;
 	}
+	
+	public static ArrayList<ScenarioModel> getScenariosByProjectID(int projectID) {
+		ArrayList<ScenarioModel> scenarios = new ArrayList<ScenarioModel>();
+		try {
+			Connection conn = DBConnection.getActiveConnection();
+			String sql = "SELECT * FROM `scenarios` WHERE `projectID` = ?";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, projectID);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				ScenarioModel scenario = new ScenarioModel();
+				scenario.scenarioID = rs.getInt("scenarioID");
+				scenario.scenarioNumber = rs.getInt("scenarioNumber");
+				scenarios.add(scenario);
+			}
+			return scenarios;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return scenarios;
+	}
 }

@@ -129,4 +129,26 @@ public class ProjectModel {
 		}
     	return false;
 	}
+	
+	
+	public static ArrayList<ProjectModel> getProjectsInPRVs(){
+		ArrayList<ProjectModel> projects = new ArrayList<ProjectModel>();
+		try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "SELECT DISTINCT projects.projectName, projects.projectID FROM projects JOIN projects_regions_vendors ON projects.projectID = projects_regions_vendors.projects_regions_vendorsProjectID";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				ProjectModel project = new ProjectModel();
+				project.projectID = rs.getInt("projectID");
+				project.projectName = rs.getString("projectName");
+				projects.add(project);
+			}
+			return projects;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return projects;
+	}
 }

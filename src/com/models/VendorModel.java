@@ -41,4 +41,23 @@ public class VendorModel {
 	
 	}
 	
+	public static String getVendorName(int vendorID){
+		
+		String vendorName = "";
+		try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "SELECT vendorName FROM vendors WHERE vendorID = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1,vendorID);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				vendorName = rs.getString("vendorName");
+				return vendorName;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return vendorName;
+	}
+	
 }

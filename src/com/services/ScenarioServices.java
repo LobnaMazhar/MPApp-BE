@@ -112,4 +112,19 @@ public class ScenarioServices {
 		json.put("deleted", deleted);
 		return json.toJSONString();
 	}
+	
+	@POST
+	@Path("/getScenariosByProjectID")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getScenariosByProjectID(@FormParam("projectID") int projectID) {
+		ArrayList<ScenarioModel> scenarios = ScenarioModel.getScenariosByProjectID(projectID);
+		JSONArray json = new JSONArray();
+		for (int i = 0; i < scenarios.size(); ++i) {
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("scenarioID", scenarios.get(i).getScenarioID());
+			jsonObj.put("scenarioNumber", scenarios.get(i).getScenarioNumber());
+			json.add(jsonObj);
+		}
+		return json.toJSONString();
+	}
 }
