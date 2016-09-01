@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.mysql.jdbc.Statement;
+
 public class UserModel {
 
 	private int userID;
@@ -46,27 +48,24 @@ public class UserModel {
 		return null;
 	}
 	
-	public static UserModel addUser(String name, String password){
+	public static boolean addUser(String name, String password){
 		try {
 			Connection conn = DBConnection.getActiveConnection();
 			String sql = "INSERT INTO `users`(`userName`, `userPassword`) VALUES (?,?)";
 			PreparedStatement stmt;
-			stmt = conn.prepareStatement(sql);
+			stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, name);
 			stmt.setString(2, password);
-			ResultSet rs = stmt.executeQuery();
+			stmt.executeUpdate();
+			ResultSet rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
-				UserModel user = new UserModel();
-				user.userID = rs.getInt("userID");
-				user.userName = rs.getString("userName");
-				user.userPassword = rs.getString("userPassword");
-				return user;
+				return true;
 			}
-			return null;
+			return false;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return false;
 	}
 }

@@ -41,4 +41,42 @@ public class SiteModel {
 		}
 		return false;
 	}
+	
+	public static boolean checkIfSiteExists(String siteID){
+		try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "SELECT * FROM `sites` WHERE `siteID` = ?";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, siteID);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return true;
+			}
+			return false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static SiteModel getSiteByID(String siteID) {
+		SiteModel site = new SiteModel();
+		try {
+			Connection conn = DBConnection.getActiveConnection();
+			String sql = "SELECT * FROM `sites` WHERE `siteID` = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, siteID);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				site.siteID = rs.getString("siteID");
+				site.regionID = rs.getInt("regionID");
+				site.vendorID = rs.getInt("vendorID");
+			}
+			return site;
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return site;
+	}
 }

@@ -151,4 +151,25 @@ public class ProjectModel {
 		}
 		return projects;
 	}
+	
+	public static ArrayList<ProjectModel> getProjectsInSiteBySiteID(String siteID){
+    	ArrayList<ProjectModel> projectsInSite = new ArrayList<ProjectModel>();
+    	try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "SELECT projectID, projectName FROM projects JOIN sites_projects ON projects.projectID = sites_projectsProjectID WHERE sites_projects.sites_projectsSiteID = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, siteID);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				ProjectModel projectInSite = new ProjectModel();
+				projectInSite.projectID = rs.getInt("projectID");
+				projectInSite.projectName = rs.getString("projectName");
+				projectsInSite.add(projectInSite);
+			}
+			return projectsInSite;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	return projectsInSite;
+    }
 }

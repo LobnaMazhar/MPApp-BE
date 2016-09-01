@@ -51,4 +51,14 @@ public class RegionServices {
 		jsonObj.put("regionName", regionName);
 		return jsonObj.toJSONString();
 	}
+	
+	@POST
+	@Path("/getRegionNameForSite")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getRegionNameForSite(@FormParam("siteID") String siteID) {
+		String regionName = RegionModel.getRegionNameForSite(siteID);
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("regionName", regionName);
+		return jsonObj.toJSONString();
+	}
 }

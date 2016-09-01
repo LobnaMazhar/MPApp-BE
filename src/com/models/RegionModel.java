@@ -125,4 +125,22 @@ public class RegionModel {
 		return monthlyPhasing;
 	}
 	
+	public static String getRegionNameForSite(String siteID){
+		String regionName = "";
+		try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "SELECT regionName FROM regions JOIN sites ON regions.regionID = sites.regionID WHERE siteID = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, siteID);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				regionName = rs.getString("regionName");
+				return regionName;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return regionName;
+	}
+	
 }

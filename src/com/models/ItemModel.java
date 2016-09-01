@@ -150,4 +150,40 @@ public class ItemModel {
 		return item;
     
     }
+    
+    public static boolean updateItemsStockByScenario(int scenarioID){
+    	try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "UPDATE `items` JOIN items_scenarios ON items.itemID = items_scenarios.items_scenariosItemID AND items_scenarios.items_scenariosScenarioID = ? SET items.itemQuantity = items.itemQuantity - items_scenarios.items_scenariosItemQuantity";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, scenarioID);
+			stmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	return false;
+    }
+    
+    public static int getItemIDByShortDescription(String shortDescription){
+    	int itemID = 0;
+    	try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "SELECT itemID FROM `items` WHERE itemShortDescription = ?";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, shortDescription);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				itemID = rs.getInt("itemID");
+				return itemID;
+			}
+			return itemID;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return itemID;
+    
+    }
 }

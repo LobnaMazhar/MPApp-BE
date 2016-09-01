@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
 import com.models.ItemModel;
 import com.models.PRVModel;
 import com.models.ProjectModel;
+import com.models.ProjectsInSitesModel;
 
 @Path("/")
 public class ProjectServices {
@@ -95,6 +96,23 @@ public class ProjectServices {
 			jsonObj.put("projectID", projectsInPRVs.get(i).getProjectID());
 			jsonObj.put("projectName", projectsInPRVs.get(i).getProjectName());	
 			json.add(jsonObj);	
+		}
+		return json.toJSONString();
+	}
+	
+	@POST
+	@Path("/getProjectsInSiteBySiteID")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getProjectsInSiteBySiteID(@FormParam("siteID") String siteID) {
+		ArrayList<ProjectModel> projectsInSite = ProjectModel.getProjectsInSiteBySiteID(siteID);
+		JSONArray json = new JSONArray();
+		for (int i = 0; i < projectsInSite.size(); ++i) {
+			JSONObject jsonObj = new JSONObject();
+			
+			jsonObj.put("projectID", projectsInSite.get(i).getProjectID());
+			jsonObj.put("projectName", projectsInSite.get(i).getProjectName());
+			
+			json.add(jsonObj);
 		}
 		return json.toJSONString();
 	}

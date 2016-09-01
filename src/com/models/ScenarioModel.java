@@ -58,17 +58,18 @@ public class ScenarioModel {
     	return false;
 	}
 	
-	public static boolean addScenario(int scenarioNumber){
+	public static boolean addScenario(int scenarioNumber, String cablesType){
 		try {
 			Connection conn = DBConnection.getActiveConnection();
-			String sql = "INSERT INTO `scenarios`(`scenarioNumber`) VALUES (?)";
+			String sql = "INSERT INTO `scenarios`(`scenarioNumber`, `cablesType`) VALUES (?, ?)";
 			PreparedStatement stmt;
 			stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, scenarioNumber);
+			stmt.setString(2, cablesType);
 			stmt.executeUpdate();
 			ResultSet rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
-				int scenarioID = getScenarioID(scenarioNumber);
+				//int scenarioID = getScenarioID(scenarioNumber);
 				return true;
 			}
 			return false;

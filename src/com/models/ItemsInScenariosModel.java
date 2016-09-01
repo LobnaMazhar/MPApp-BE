@@ -106,4 +106,26 @@ public class ItemsInScenariosModel {
 		}
     	return false;
 	}
+	
+	public static boolean isAvailableInStock(int scenarioID) {
+		try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "SELECT `items_scenarios`.`items_scenariosItemQuantity`, `items`.`itemQuantity` FROM `items_scenarios` JOIN `items` ON `items_scenarios`.`items_scenariosItemID` = `items`.`itemID` WHERE `items_scenarios`.`items_scenariosScenarioID` = ?";
+    		PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, scenarioID);
+			ResultSet rs = stmt.executeQuery();
+			int itemQuantity, itemStock;
+			while(rs.next()) {
+				itemQuantity = rs.getInt("items_scenariosItemQuantity");
+				itemStock = rs.getInt("itemQuantity");
+				if (itemQuantity > itemStock)
+					return false;	
+			}
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

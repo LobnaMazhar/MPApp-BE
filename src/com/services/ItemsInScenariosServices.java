@@ -70,4 +70,14 @@ public class ItemsInScenariosServices {
 		return json.toJSONString();
 			
 	}
+	
+	@POST
+	@Path("/isAvailableStock")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String isAvailableInStock(@FormParam("scenarioID") int scenarioID) {
+		boolean available = ItemsInScenariosModel.isAvailableInStock(scenarioID);
+		JSONObject json = new JSONObject();
+		json.put("available", available);
+		return json.toJSONString();
+	}
 }

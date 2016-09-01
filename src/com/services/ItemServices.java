@@ -82,4 +82,27 @@ public class ItemServices {
 		
 		return jsonObj.toJSONString();
 	}
+	
+	@POST
+	@Path("/updateItemsStockByScenario")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String updateItemsStockByScenario(@FormParam ("scenarioID") int scenarioID){
+		boolean updated = ItemModel.updateItemsStockByScenario(scenarioID);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("updated", updated);
+		return jsonObj.toJSONString();
+	}
+	
+	@POST
+	@Path("/getItemIDByShortDescription")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getItemIDByShortDescription(@FormParam("shortDescription") String shortDescription) {
+		int itemID = ItemModel.getItemIDByShortDescription(shortDescription);
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("itemID", itemID);		
+		return jsonObj.toJSONString();
+	}
+	
 }

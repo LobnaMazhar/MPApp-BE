@@ -45,8 +45,8 @@ public class ScenarioServices {
 	@POST
 	@Path("/addScenario")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String addScenario(@FormParam("scenarioNumber") int scenarioNumber) {
-		boolean added = ScenarioModel.addScenario(scenarioNumber);
+	public String addScenario(@FormParam("scenarioNumber") int scenarioNumber, @FormParam("cablesType") String cablesType) {
+		boolean added = ScenarioModel.addScenario(scenarioNumber, cablesType);
 		JSONObject json = new JSONObject();
 		json.put("added", added);
 		return json.toJSONString();

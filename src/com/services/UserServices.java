@@ -30,9 +30,9 @@ public class UserServices {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String addUser(@FormParam("userName") String name,
 			@FormParam("userPassword") String password) {
-		UserModel user = UserModel.addUser(name, password);
+		boolean added = UserModel.addUser(name, password);
 		JSONObject json = new JSONObject();
-		json.put("userName", user.getUserName());
+		json.put("added", added);
 		return json.toJSONString();
 	}
 }
