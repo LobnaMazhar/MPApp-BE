@@ -131,11 +131,11 @@ public class ProjectModel {
 	}
 	
 	
-	public static ArrayList<ProjectModel> getProjectsInPRVs(){
+	public static ArrayList<ProjectModel> getProjectsInPRVMs(){
 		ArrayList<ProjectModel> projects = new ArrayList<ProjectModel>();
 		try {
     		Connection conn = DBConnection.getActiveConnection();
-        	String sql = "SELECT DISTINCT projects.projectName, projects.projectID FROM projects JOIN projects_regions_vendors ON projects.projectID = projects_regions_vendors.projects_regions_vendorsProjectID";
+        	String sql = "SELECT DISTINCT projects.projectID, projects.projectName FROM projects JOIN projects_regions_vendors_months ON projects.projectID = projects_regions_vendors_months.projects_regions_vendors_monthsProjectID";
 			PreparedStatement stmt;
 			stmt = conn.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();

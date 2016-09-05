@@ -50,7 +50,6 @@ public class ProjectsInSitesModel {
 			stmt.executeUpdate();
 			ResultSet rs = stmt.getGeneratedKeys();
 			if (rs.next()){
-				ItemModel.updateItemsStockByScenario(scenarioID);
 				return true;
 			}
 			return false;

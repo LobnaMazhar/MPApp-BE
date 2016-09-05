@@ -41,4 +41,19 @@ public class VendorServices {
 		jsonObj.put("vendorName", vendorName);
 		return jsonObj.toJSONString();
 	}
+	
+	@POST
+	@Path("/getVendorsWithProjectAndRegion")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getVendorsWithProjectAndRegion(@FormParam("projectID") int projectID, @FormParam("regionID") int regionID) {
+		ArrayList<VendorModel> vendors = VendorModel.getVendorsWithProjectAndRegion(projectID, regionID);
+		JSONArray json = new JSONArray();
+		for (int i = 0; i < vendors.size(); ++i) {
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("vendorID", vendors.get(i).getVendorID());
+			jsonObj.put("vendorName", vendors.get(i).getVendorName());
+			json.add(jsonObj);
+		}
+		return json.toJSONString();
+	}
 }

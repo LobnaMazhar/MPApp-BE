@@ -12,7 +12,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.models.ItemModel;
-import com.models.PRVModel;
+import com.models.PRVMModel;
 import com.models.ProjectModel;
 import com.models.ProjectsInSitesModel;
 
@@ -86,15 +86,15 @@ public class ProjectServices {
 	}
 	
 	@POST
-	@Path("/getProjectsInPRVs")
+	@Path("/getProjectsInPRVMs")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getProjectsInPRVs() {
-		ArrayList<ProjectModel> projectsInPRVs = ProjectModel.getProjectsInPRVs();
+		ArrayList<ProjectModel> projectsInPRVMs = ProjectModel.getProjectsInPRVMs();
 		JSONArray json = new JSONArray();
-		for (int i = 0; i < projectsInPRVs.size(); ++i) {
+		for (int i = 0; i < projectsInPRVMs.size(); ++i) {
 			JSONObject jsonObj = new JSONObject();
-			jsonObj.put("projectID", projectsInPRVs.get(i).getProjectID());
-			jsonObj.put("projectName", projectsInPRVs.get(i).getProjectName());	
+			jsonObj.put("projectID", projectsInPRVMs.get(i).getProjectID());
+			jsonObj.put("projectName", projectsInPRVMs.get(i).getProjectName());	
 			json.add(jsonObj);	
 		}
 		return json.toJSONString();

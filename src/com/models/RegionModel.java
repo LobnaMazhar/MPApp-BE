@@ -143,4 +143,26 @@ public class RegionModel {
 		return regionName;
 	}
 	
+	public static ArrayList<RegionModel> getRegionsWithProject(int projectID){
+		ArrayList<RegionModel> regions = new ArrayList<RegionModel>();
+		try {
+    		Connection conn = DBConnection.getActiveConnection();
+        	String sql = "SELECT DISTINCT regions.regionID, regions.regionName FROM regions JOIN projects_regions_vendors_months ON regions.regionID = projects_regions_vendors_months.projects_regions_vendors_monthsRegionID WHERE projects_regions_vendors_months.projects_regions_vendors_monthsProjectID = ?";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, projectID);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				RegionModel region = new RegionModel();
+				region.regionID = rs.getInt("regionID");
+				region.regionName = rs.getString("regionName");
+				regions.add(region);
+			}
+			return regions;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return regions;
+	}
+	
 }

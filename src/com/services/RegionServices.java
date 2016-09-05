@@ -61,4 +61,19 @@ public class RegionServices {
 		jsonObj.put("regionName", regionName);
 		return jsonObj.toJSONString();
 	}
+	
+	@POST
+	@Path("/getRegionsWithProject")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getRegionsWithProject(@FormParam("projectID") int projectID) {
+		ArrayList<RegionModel> regions = RegionModel.getRegionsWithProject(projectID);
+		JSONArray json = new JSONArray();
+		for (int i = 0; i < regions.size(); ++i) {
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("regionID", regions.get(i).getRegionID());
+			jsonObj.put("regionName", regions.get(i).getRegionName());
+			json.add(jsonObj);
+		}
+		return json.toJSONString();
+	}
 }
