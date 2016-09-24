@@ -11,8 +11,11 @@ import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.models.DateModel;
 import com.models.PRVMModel;
 import com.models.ProjectModel;
+import com.models.RegionModel;
+import com.models.VendorModel;
 
 @Path("/")
 public class PRVMServices {
@@ -43,15 +46,12 @@ public class PRVMServices {
 			JSONObject jsonObj = new JSONObject();
 			jsonObj.put("prvmID", prvms.get(i).getPrvmID());
 			jsonObj.put("prvmProjectID", prvms.get(i).getPrvmProjectID());
+			jsonObj.put("projectName", ProjectModel.getProjectName(prvms.get(i).getPrvmProjectID()));
 			jsonObj.put("prvmRegionID", prvms.get(i).getPrvmRegionID());
 			jsonObj.put("prvmVendorID", prvms.get(i).getPrvmVendorID());
 			jsonObj.put("prvmMonthID", prvms.get(i).getPrvmMonthID());
 			jsonObj.put("prvmPhasing", prvms.get(i).getPrvmPhasing());
 			jsonObj.put("prvmYearTarget", prvms.get(i).getPrvmYearTarget());
-
-			String projectName = ProjectModel.getProjectName(prvms.get(i)
-					.getPrvmProjectID());
-			jsonObj.put("projectName", projectName);
 
 			json.add(jsonObj);
 		}
@@ -67,17 +67,10 @@ public class PRVMServices {
 		for (int i = 0; i < prvms.size(); ++i) {
 			JSONObject jsonObj = new JSONObject();
 			jsonObj.put("prvmID", prvms.get(i).getPrvmID());
-			jsonObj.put("prvmProjectID", prvms.get(i).getPrvmProjectID());
 			jsonObj.put("prvmRegionID", prvms.get(i).getPrvmRegionID());
 			jsonObj.put("prvmVendorID", prvms.get(i).getPrvmVendorID());
-			jsonObj.put("prvmMonthID", prvms.get(i).getPrvmMonthID());
-			jsonObj.put("prvmPhasing", prvms.get(i).getPrvmPhasing());
 			jsonObj.put("prvmYearTarget", prvms.get(i).getPrvmYearTarget());
-
-			String projectName = ProjectModel.getProjectName(prvms.get(i)
-					.getPrvmProjectID());
-			jsonObj.put("projectName", projectName);
-
+			
 			json.add(jsonObj);
 		}
 		return json.toJSONString();
@@ -184,5 +177,36 @@ public class PRVMServices {
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("updated", updated);
 		return jsonObj.toJSONString();
+	}
+	
+	@POST
+	@Path("/getMonthlyPhasingPerProject")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getMonthPhasing(@FormParam("projectID") int projectID) {
+		ArrayList<PRVMModel> prvmList = PRVMModel.getMonthlyPhasingPerProject(projectID);
+		
+		JSONArray json = new JSONArray();
+		for(int i=0; i<prvmList.size(); ++i){
+			JSONObject jsonObject = new JSONObject();
+			
+			jsonObject.put("projectName", ProjectModel.getProjectName(projectID));
+			
+			int regionID = prvmList.get(i).getPrvmRegionID();
+			jsonObject.put("regionID", regionID);
+			jsonObject.put("regionName", RegionModel.getRegionName(regionID));
+			
+			int vendorID = prvmList.get(i).getPrvmVendorID();
+			jsonObject.put("vendorID", vendorID);
+			jsonObject.put("vendorName", VendorModel.getVendorName(vendorID));
+			
+			int monthID = prvmList.get(i).getPrvmMonthID();
+			jsonObject.put("monthID", monthID);
+			jsonObject.put("monthName", DateModel.getMonthName(monthID));
+			
+			jsonObject.put("monthPhase", prvmList.get(i).getPrvmPhasing());
+			
+			json.add(jsonObject);
+		}
+		return json.toJSONString();
 	}
 }

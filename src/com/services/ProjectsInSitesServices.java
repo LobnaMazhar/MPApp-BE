@@ -11,8 +11,10 @@ import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.models.DateModel;
 import com.models.ProjectModel;
 import com.models.ProjectsInSitesModel;
+import com.models.RegionModel;
 import com.models.SiteModel;
 
 @Path("/")
@@ -49,8 +51,17 @@ public class ProjectsInSitesServices {
 			
 			jsonObj.put("projectsInSitesID", sites.get(i).getProjectsInSitesID());
 			jsonObj.put("siteID", sites.get(i).getProjectsInSitesSiteID());
-			jsonObj.put("projectID", sites.get(i).getProjectsInSitesProjectID());
+			jsonObj.put("projectID", sites.get(i).getProjectsInSitesProjectID());			
 			jsonObj.put("date", sites.get(i).getProjectsInSitesDate());
+			
+			String projectName = ProjectModel.getProjectName(sites.get(i).getProjectsInSitesProjectID());
+			jsonObj.put("projectName", projectName);
+			
+			String monthName = DateModel.getMonthName(sites.get(i).getProjectsInSitesDate());
+			jsonObj.put("monthName", monthName);
+			
+			String regionName = RegionModel.getRegionNameForSite(sites.get(i).getProjectsInSitesSiteID());
+			jsonObj.put("regionName", regionName);
 			
 			json.add(jsonObj);
 		}

@@ -33,17 +33,17 @@ public class ProjectServices {
 		}
 		return json.toJSONString();
 	}
-	
+
 	@POST
 	@Path("/getProjectName")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getProjectName(@FormParam("projectID")int projectID) {
+	public String getProjectName(@FormParam("projectID") int projectID) {
 		String projectName = ProjectModel.getProjectName(projectID);
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("projectName", projectName);
 		return jsonObj.toJSONString();
 	}
-	
+
 	@POST
 	@Path("/getProjectID")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -53,7 +53,7 @@ public class ProjectServices {
 		jsonObj.put("projectID", projectID);
 		return jsonObj.toJSONString();
 	}
-	
+
 	@POST
 	@Path("/addProject")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -63,55 +63,58 @@ public class ProjectServices {
 		json.put("added", added);
 		return json.toJSONString();
 	}
-	
+
 	@POST
 	@Path("/deleteProject")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String deleteProject(@FormParam("projectID") int projectID){
+	public String deleteProject(@FormParam("projectID") int projectID) {
 		boolean deleted = ProjectModel.deleteProject(projectID);
 		JSONObject json = new JSONObject();
 		json.put("deleted", deleted);
 		return json.toJSONString();
 	}
-	
+
 	@POST
 	@Path("/editProject")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String editProject(@FormParam("projectID") int projectID, @FormParam("projectName") String projectName){
+	public String editProject(@FormParam("projectID") int projectID,
+			@FormParam("projectName") String projectName) {
 		boolean edited = ProjectModel.editProject(projectID, projectName);
 		JSONObject json = new JSONObject();
 		json.put("edited", edited);
 		return json.toJSONString();
-			
+
 	}
-	
+
 	@POST
 	@Path("/getProjectsInPRVMs")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getProjectsInPRVs() {
-		ArrayList<ProjectModel> projectsInPRVMs = ProjectModel.getProjectsInPRVMs();
+		ArrayList<ProjectModel> projectsInPRVMs = ProjectModel
+				.getProjectsInPRVMs();
 		JSONArray json = new JSONArray();
 		for (int i = 0; i < projectsInPRVMs.size(); ++i) {
 			JSONObject jsonObj = new JSONObject();
 			jsonObj.put("projectID", projectsInPRVMs.get(i).getProjectID());
-			jsonObj.put("projectName", projectsInPRVMs.get(i).getProjectName());	
-			json.add(jsonObj);	
+			jsonObj.put("projectName", projectsInPRVMs.get(i).getProjectName());
+			json.add(jsonObj);
 		}
 		return json.toJSONString();
 	}
-	
+
 	@POST
 	@Path("/getProjectsInSiteBySiteID")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getProjectsInSiteBySiteID(@FormParam("siteID") String siteID) {
-		ArrayList<ProjectModel> projectsInSite = ProjectModel.getProjectsInSiteBySiteID(siteID);
+		ArrayList<ProjectModel> projectsInSite = ProjectModel
+				.getProjectsInSiteBySiteID(siteID);
 		JSONArray json = new JSONArray();
 		for (int i = 0; i < projectsInSite.size(); ++i) {
 			JSONObject jsonObj = new JSONObject();
-			
+
 			jsonObj.put("projectID", projectsInSite.get(i).getProjectID());
 			jsonObj.put("projectName", projectsInSite.get(i).getProjectName());
-			
+
 			json.add(jsonObj);
 		}
 		return json.toJSONString();

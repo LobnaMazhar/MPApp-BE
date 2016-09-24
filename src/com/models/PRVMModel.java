@@ -50,7 +50,7 @@ public class PRVMModel {
 			int vendorID, int phasing, int yearTarget) {
 		try {
 			Connection conn = DBConnection.getActiveConnection();
-			String sql = "INSERT INTO `projects_regions_vendors_months`(`projects_regions_vendors_monthsProjectID`, `projects_regions_vendors_monthsRegionID`, `projects_regions_vendors_monthsVendorID`, `projects_regions_vendors_monthsMonthID`, `projects_regions_vendors_monthsPhasing`, `projects_regions_vendors_monthsRemainingOnPhasing`, `projects_regions_vendors_monthsYearTarget`) VALUES (?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO `projects_regions_vendors_months`(`projects_regions_vendors_monthsProjectID`, `projects_regions_vendors_monthsRegionID`, `projects_regions_vendors_monthsVendorID`, `projects_regions_vendors_monthsMonthID`, `projects_regions_vendors_monthsPhasing`, `projects_regions_vendors_monthsRemainingOnPhasing`, `projects_regions_vendors_monthsYearTarget`, `projects_regions_vendors_monthsOriginalYearTarget`) VALUES (?,?,?,?,?,?,?,?)";
 			PreparedStatement stmt = conn.prepareStatement(sql,
 					Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, projectID);
@@ -60,6 +60,7 @@ public class PRVMModel {
 			stmt.setInt(5, phasing);
 			stmt.setInt(6, phasing);
 			stmt.setInt(7, yearTarget);
+			stmt.setInt(8, yearTarget);
 			stmt.executeUpdate();
 			ResultSet rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
@@ -76,7 +77,7 @@ public class PRVMModel {
 		ArrayList<PRVMModel> prvms = new ArrayList<PRVMModel>();
 		try {
 			Connection conn = DBConnection.getActiveConnection();
-			String sql = "SELECT * FROM projects_regions_vendors_months";
+			String sql = "SELECT * FROM projects_regions_vendors_months GROUP BY `projects_regions_vendors_monthsProjectID`, `projects_regions_vendors_monthsRegionID`, `projects_regions_vendors_monthsVendorID`";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -107,21 +108,17 @@ public class PRVMModel {
 		ArrayList<PRVMModel> prvms = new ArrayList<PRVMModel>();
 		try {
 			Connection conn = DBConnection.getActiveConnection();
-			String sql = "select * from projects_regions_vendors_months where projects_regions_vendors_monthsProjectID = ?";
+			String sql = "SELECT projects_regions_vendors_monthsRegionID, projects_regions_vendors_monthsVendorID, projects_regions_vendors_monthsYearTarget, projects_regions_vendors_monthsID FROM projects_regions_vendors_months WHERE projects_regions_vendors_monthsProjectID = ? GROUP BY (projects_regions_vendors_monthsRegionID)";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, projectID);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				PRVMModel prvm = new PRVMModel();
 				prvm.prvmID = rs.getInt("projects_regions_vendors_monthsID");
-				prvm.prvmProjectID = rs
-						.getInt("projects_regions_vendors_monthsProjectID");
 				prvm.prvmRegionID = rs
 						.getInt("projects_regions_vendors_monthsRegionID");
-				prvm.prvmMonthID = rs
-						.getInt("projects_regions_vendors_monthsMonthID");
-				prvm.prvmPhasing = rs
-						.getInt("projects_regions_vendors_monthsPhasing");
+				prvm.prvmVendorID = rs
+						.getInt("projects_regions_vendors_monthsVendorID");
 				prvm.prvmYearTarget = rs
 						.getInt("projects_regions_vendors_monthsYearTarget");
 				prvms.add(prvm);
@@ -275,5 +272,31 @@ public class PRVMModel {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public static ArrayList<PRVMModel> getMonthlyPhasingPerProject(int projectID){
+		ArrayList<PRVMModel> prvmList = new ArrayList<PRVMModel>();
+		try {
+			Connection conn = DBConnection.getActiveConnection();
+			String sql = "SELECT `projects_regions_vendors_monthsRegionID`, `projects_regions_vendors_monthsVendorID`, `projects_regions_vendors_monthsMonthID`, `projects_regions_vendors_monthsPhasing` FROM `projects_regions_vendors_months` WHERE `projects_regions_vendors_monthsProjectID` = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, projectID);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				PRVMModel prvmObject = new PRVMModel();
+				
+				prvmObject.prvmProjectID = projectID;
+				prvmObject.prvmRegionID = rs.getInt("projects_regions_vendors_monthsRegionID");
+				prvmObject.prvmVendorID = rs.getInt("projects_regions_vendors_monthsVendorID");
+				prvmObject.prvmMonthID = rs.getInt("projects_regions_vendors_monthsMonthID");
+				prvmObject.prvmPhasing = rs.getInt("projects_regions_vendors_monthsPhasing");
+				
+				prvmList.add(prvmObject);
+			}
+			return prvmList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return prvmList;
 	}
 }
